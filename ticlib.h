@@ -44,39 +44,39 @@ using namespace std;
 // Converts an object of any type to a string
 template<class T> string to_string(const T& t)
 {
-	ostringstream os;
-	os << t;
-	return os.str();
+  ostringstream os;
+  os << t;
+  return os.str();
 }
 
 struct Exit : runtime_error {
-	Exit(): runtime_error("Exit") {}
+ Exit(): runtime_error("Exit") {}
 };
 
 // error() simply disguises throws:
 inline void error(const string& s)
 {
-	throw runtime_error(s);
+  throw runtime_error(s);
 }
 
 inline void error(const string& s, const string& s2)
 {
-	error(s+s2);
+  error(s+s2);
 }
 
 inline void error(const string& s, int i)
 {
-	ostringstream os;
-	os << s <<": " << i;
-	error(os.str());
+  ostringstream os;
+  os << s <<": " << i;
+  error(os.str());
 }
 
 
 template<class T> char* as_bytes(T& i)	// needed for binary I/O
 {
-	void* addr = &i;	// get the address of the first byte
-						// of memory used to store the object
-	return static_cast<char*>(addr); // treat that memory as bytes
+  void* addr = &i;	// get the address of the first byte
+  // of memory used to store the object
+  return static_cast<char*>(addr); // treat that memory as bytes
 }
 
 
@@ -93,16 +93,16 @@ inline void keep_window_open()
 
 inline void keep_window_open(string s)
 {
-	if (s=="") return;
-	cin.clear();
-	cin.ignore(120,'\n');
-	for (;;) {
-		cout << "Please enter " << s << " to exit\n";
-		string ss;
-		while (cin >> ss && ss!=s)
-			cout << "Please enter " << s << " to exit\n";
-		return;
-	}
+  if (s=="") return;
+  cin.clear();
+  cin.ignore(120,'\n');
+  for (;;) {
+    cout << "Please enter " << s << " to exit\n";
+    string ss;
+    while (cin >> ss && ss!=s)
+      cout << "Please enter " << s << " to exit\n";
+    return;
+  }
 }
 
 // Returns the system time
@@ -123,15 +123,15 @@ const int DEFAULT_MAX_RANDOM_INT = 10;
 
 inline int random_int(int min = DEFAULT_MIN_RANDOM_INT, int max = DEFAULT_MAX_RANDOM_INT)
 {
-  if (min <= max) {
-    std::uniform_int_distribution<int> distribution(min, max);
-    std::random_device rd;
-    std::mt19937 random_generator(rd());
-    return distribution(random_generator);
+  if (max < min) {
+    int tmp {max};
+    max = min;
+    min = tmp;
   }
-  else {
-    throw "random_int: lower bound is greater than upper bound";
-  }
+  std::uniform_int_distribution<int> distribution(min, max);
+  std::random_device rd {};
+  std::mt19937 random_generator(rd());
+  return distribution(random_generator);
 }
 
 const double DEFAULT_MIN_RANDOM_DOUBLE = 0.0;
@@ -142,15 +142,15 @@ const double DEFAULT_MAX_RANDOM_DOUBLE = 1.0;
 
 inline double random_double(double min = DEFAULT_MIN_RANDOM_DOUBLE, double max = DEFAULT_MAX_RANDOM_DOUBLE)
 {
-  if (min <= max) {
-    std::uniform_real_distribution<double> distribution(min, max);
-    std::random_device rd;
-    std::mt19937 random_generator(rd());
-    return distribution(random_generator);
+  if (max < min) {
+    double tmp {max};
+    max = min;
+    min = tmp;
   }
-  else {
-    throw "random_double: lower bound is greater than upper bound";
-  }
+  std::uniform_real_distribution<double> distribution(min, max);
+  std::random_device rd {};
+  std::mt19937 random_generator(rd());
+  return distribution(random_generator);
 }
 
 
@@ -162,35 +162,35 @@ using Iterator = typename C::iterator;
 
 // Sorts the elements of a Container 'c' using the '<' operator
 template<typename C>
-	// requires Container<C>()
+// requires Container<C>()
 void sort(C& c)
 {
-	std::sort(c.begin(), c.end());
+  std::sort(c.begin(), c.end());
 }
 
 // Sorts the elements of a Container 'c' using 'p' as predicate
 template<typename C, typename Pred>
-// requires Container<C>() && Binary_Predicate<Value_type<C>>()
-void sort(C& c, Pred p)
+  // requires Container<C>() && Binary_Predicate<Value_type<C>>()
+  void sort(C& c, Pred p)
 {
-	std::sort(c.begin(), c.end(), p);
+  std::sort(c.begin(), c.end(), p);
 }
 
 // Finds the value 'v' in Container 'c'
 // Returns an iterator to the element found
 template<typename C, typename Val>
-	// requires Container<C>() && Equality_comparable<C,Val>()
-Iterator<C> find(C& c, Val v)
+  // requires Container<C>() && Equality_comparable<C,Val>()
+  Iterator<C> find(C& c, Val v)
 {
-	return std::find(c.begin(), c.end(), v);
+  return std::find(c.begin(), c.end(), v);
 }
 
 // Finds the value 'v' among the elements of Container 'c' for which 'p' is true
 template<typename C, typename Pred>
-// requires Container<C>() && Predicate<Pred,Value_type<C>>()
-Iterator<C> find_if(C& c, Pred p)
+  // requires Container<C>() && Predicate<Pred,Value_type<C>>()
+  Iterator<C> find_if(C& c, Pred p)
 {
-	return std::find_if(c.begin(), c.end(), p);
+  return std::find_if(c.begin(), c.end(), p);
 }
 
 #endif
